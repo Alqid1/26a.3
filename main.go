@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -15,8 +16,6 @@ var mutex sync.Mutex
 const lenghtOfBuf int = 10
 
 func main() {
-	//test commit
-	//test commit 2
 	//1)Отвечает за постоянное считывание данных с консоли, ведет запись в кольцевой буффер
 	//2)Отвечает за отправку сигнала о завершении программы при введении "end"
 	wait := func(done chan bool, permission []chan bool, arr *[lenghtOfBuf]int, arrIndex *int, arrLastIndex *int) {
@@ -46,6 +45,7 @@ func main() {
 
 				mutex.Unlock()
 			}
+			log.Print("The waiting stage has been completed")
 			fmt.Println("Данные получены,текущее состояние буфера:", *arr)
 			permission[1] <- true
 		}
@@ -63,6 +63,7 @@ func main() {
 				permission[2] <- true
 			}
 		}()
+		log.Print("The initialization stage is completed")
 		return output
 	}
 
@@ -86,6 +87,7 @@ func main() {
 			}
 
 		}()
+		log.Print("The addition stage is completed")
 		return filtredPos
 	}
 
@@ -109,6 +111,7 @@ func main() {
 			}
 
 		}()
+		log.Print("The multiplication stage is completed")
 		return filtredThree
 	}
 
@@ -137,6 +140,7 @@ func main() {
 				}
 			}()
 		case <-done:
+			log.Print("The program is completed")
 			fmt.Println("Программа завершена")
 			return
 		}
